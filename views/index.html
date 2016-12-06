@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+
+    <title>JeffSan</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="bootstrap-3.3.7-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="stylesheets/main.css" rel="stylesheet">
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">JeffSan</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="/">Home</a></li>
+            <li><a href="bar">Bar</a></li>
+            <li><a href="results">Scan Results</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
+
+    <div class="container" style="margin-top: 50px;">
+
+      <div class="starter-template">
+        <h1> D3js visualization of Arachni scans. </h1>
+        <p class="lead">Scans of http://testhtml5.vulnweb.com/</p>
+      </div>
+
+
+      <div class="jumbotron">
+        <h1> Dendogram of issues by severity</h1>
+        <svg width="960" height="600"></svg>
+      </div>
+
+    </div><!-- /.container -->
+
+
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+    <script src="http://d3js.org/d3.v4.0.0-alpha.4.min.js"> </script>
+    <script src="http://d3js.org/d3.v4.min.js"></script>
+
+    <script>
+
+
+    var jsondata = $.getJSON( "testhtml5.json", function(data) {
+        console.log( "success" + data.issues[0].name);
+  var issues = [];
+        for(i=0; i<data.issues.length; i++){
+          //console.log(data.issues[i].name);
+          issues[i] = data.issues[i].name;
+        }
+        console.log("ISSUES:"+issues);
+
+    });
+
+    /*DENDOGRAM*/
+
+    var svg = d3.select("svg"),
+    width = +svg.attr("width"),
+    height = +svg.attr("height"),
+    g = svg.append("g").attr("transform", "translate(40,0)");
+
+    var cluster = d3.cluster()
+        .size([height, width - 160]);
+
+    var stratify = d3.stratify()
+        .parentId(function(d) { return d.id.substring(0, d.id.lastIndexOf(".")); });
+
+    d3.csv("dendo.csv", function(error, data) {
+      if (error) throw error;
+
+      var root = stratify(data)
+          .sort(function(a, b) { return (a.height - b.height) || a.id.localeCompare(b.id); });
+
+      cluster(root);
+
+      var link = g.selectAll(".link")
+          .data(root.descendants().slice(1))
+        .enter().append("path")
+          .attr("class", "link")
+          .attr("d", function(d) {
+            return "M" + d.y + "," + d.x
+                + "C" + (d.parent.y + 100) + "," + d.x
+                + " " + (d.parent.y + 100) + "," + d.parent.x
+                + " " + d.parent.y + "," + d.parent.x;
+          });
+
+      var node = g.selectAll(".node")
+          .data(root.descendants())
+        .enter().append("g")
+          .attr("class", function(d) { return "node" + (d.children ? " node--internal" : " node--leaf"); })
+          .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
+
+      node.append("circle")
+          .attr("r", 2.5);
+
+      node.append("text")
+          .attr("dy", 3)
+          .attr("x", function(d) { return d.children ? -8 : 8; })
+          .style("text-anchor", function(d) { return d.children ? "end" : "start"; })
+          .text(function(d) { return d.id.substring(d.id.lastIndexOf(".") + 1); });
+    });
+
+
+    </script>
+  </body>
+</html>
