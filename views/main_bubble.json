@@ -1,0 +1,25 @@
+{"name":"bubble", "children": [
+{"name":"Information","description":"Informational results",
+"children":[
+	{"name": "Allowed-HTTP-methods","note":"There are a number of HTTP methods that can be used on a webserver (OPTIONS, HEAD, GET, POST, PUT, DELETE etc.). Each of these methods perform a different function and each have an associated level of risk when their use is permitted on the webserver."},
+	{"name": "Interesting-response","note":"The server responded with a non 200 (OK) nor 404 (Not Found) status code. This is a non-issue, however exotic HTTP response status codes can provide useful insights into the behavior of the web application and assist with the penetration test."},
+	{"name": "HTTPOnly-cookie","note":"HTTP by itself is a stateless protocol. Therefore the server is unable to determine which requests are performed by which client, and which clients are authenticated or unauthenticated."}
+]},
+{"name": "Low", "description": "Low risk security results",
+"children":[
+	{"name":"Insecure origin-header","note":"Cross Origin Resource Sharing (CORS) is an HTML5 technology which gives modern web browsers the ability to bypass restrictions implemented by the Same Origin Policy. The Same Origin Policy requires that both the JavaScript and the page are loaded from the same domain in order to allow JavaScript to interact with the page. This in turn prevents malicious JavaScript being executed when loaded from external domains."},
+	{"name":"Missing header","note":"Clickjacking (User Interface redress attack, UI redress attack, UI redressing) is a malicious technique of tricking a Web user into clicking on something different from what the user perceives they are clicking on, thus potentially revealing confidential information or taking control of their computer while clicking on seemingly innocuous web pages."},
+	{"name":"Password autocomplete","note":"In typical form-based web applications, it is common practice for developers to allow autocomplete within the HTML form to improve the usability of the page. With autocomplete enabled (default), the browser is allowed to cache previously entered form values."}
+]},
+{"name":"Medium", "description":"Medium risks",
+"children":[
+	{"name":"Common directory","note":"Web applications are often made up of multiple files and directories. It is possible that over time some directories may become unreferenced (unused) by the web application and forgotten about by the administrator/developer. Because web applications are built using common frameworks, they contain common directories that can be discovered (independent of server)."},
+	{"name":"Unencrypted password","note":"The HTTP protocol by itself is clear text, meaning that any data that is transmitted via HTTP can be captured and the contents viewed."}
+]},
+{"name":"High", "description":"High risks critical issues",
+"children":[
+	{"name":"CSRF","address":"https://www.owasp.org/index.php/Cross-Site_Request_Forgery_(CSRF)","note":"A CSRF attack forces a logged-on victim’s browser to send a forged HTTP request, including the victim’s session cookie and any other automatically included authentication information, to a vulnerable web application. This allows the attacker to force the victim’s browser to generate requests the vulnerable application thinks are legitimate requests from the victim."},
+	{"name":"XSS","address":"https://www.owasp.org/index.php/Cross-site_Scripting_(XSS)","note":"Injects an HTML element into page inputs and then parses the HTML markup of\ntainted responses to look for proof of vulnerability."},
+	{"name":"DomBasedXSS","address":"https://www.owasp.org/index.php/Types_of_Cross-Site_Scripting#DOM_Based_XSS_.28AKA_Type-0.29","note":"DOM-based Cross-Site Scripting is the de-facto name for XSS bugs which are the result of active browser-side content on a page, typically JavaScript, obtaining user input and then doing something unsafe with it which leads to execution of injected code. This document only discusses JavaScript bugs which lead to XSS."}
+]}
+]}

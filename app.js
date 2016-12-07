@@ -33,6 +33,10 @@ app.get('/results', function(req, res, next){
   res.render('results.html', {title:'JeffSan', message:'Cognitive Health Application Management System'});
 });
 
+app.get('/bubble', function(req, res, next){
+  res.render('bubble.html', {title:'JeffSan', message:'Cognitive Health Application Management System'});
+});
+
 var server = http.createServer(function (req, res) {
     if (req.method === 'POST') {
         var body = '';
